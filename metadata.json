@@ -1,7 +1,0 @@
-{
-    "name": "Azan",
-    "description": "Azan is an Islamic prayer times application",
-    "uuid": "azan@fahri.nurul.id",
-    "settings-schema": "org.gnome.shell.extensions.azan",
-    "shell-version": ["3.26.1"]
-}
