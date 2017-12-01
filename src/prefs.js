@@ -102,16 +102,17 @@ const PagePrefsGrid = new GObject.Class({
         spin_properties = Params.parse(spin_properties, {
             adjustment: adjustment,
             numeric: true,
+            digits: 4,
             snap_to_ticks: true
         }, true);
         let spin_button = new Gtk.SpinButton(spin_properties);
 
-        spin_button.set_value(this._settings.get_int(key));
+        spin_button.set_value(this._settings.get_double(key));
         spin_button.connect('value-changed', Lang.bind(this, function(spin) {
-            let value = spin.get_value_as_int();
+            let value = spin.get_value();
 
-            if(this._settings.get_int(key) !== value) {
-                this._settings.set_int(key, value);
+            if(this._settings.get_double(key) !== value) {
+                this._settings.set_double(key, value);
             }
         }));
 
@@ -214,38 +215,66 @@ const AzanPrefsWidget = new GObject.Class({
     },
 
     _get_tab_config: function() {
-        let general_page = new PagePrefsGrid();
-        general_page.add_spin('Refresh interval in seconds.', PrefsKeys.REFRESH_INTERVAL, {
-            lower: 1,
-            upper: 10,
-            step_increment: 1
-        });
-        general_page.add_combo('Position on top bar.', PrefsKeys.POSITION, [
-          { "title": "Left side", "value": "left" },
-          { "title": "Center", "value": "center" },
-          { "title": "Right side", "value": "right" }
-        ], 'string');
-        general_page.add_boolean('Enable CPU indicator.', PrefsKeys.CPU_METER);
-        general_page.add_boolean('Enable memory indicator.', PrefsKeys.MEMORY_METER);
-        general_page.add_boolean('Enable disk indicator.', PrefsKeys.STORAGE_METER);
-        general_page.add_boolean('Enable network indicator.', PrefsKeys.NETWORK_METER);
-        general_page.add_boolean('Enable swap indicator.', PrefsKeys.SWAP_METER);
-        general_page.add_boolean('Enable system load indicator.', PrefsKeys.LOAD_METER);
 
-        let memory_page = new PagePrefsGrid();
-        memory_page.add_combo('Memory calculation method for process list sorting.', PrefsKeys.MEMORY_CALCULATION_METHOD, [
-          { "title": "RAM only", "value": "ram_only" },
-          { "title": "All memory", "value": "all" }
+        let calculation_page = new PagePrefsGrid();
+        calculation_page.add_combo('Calculation method', PrefsKeys.CALCULATION_METHOD, [
+            {'title': 'Muslim World League', 'value': 'MWL'},
+            {'title': 'Islamic Society of North America (ISNA)', 'value': 'ISNA'},
+            {'title': 'Egyptian General Authority of Survey', 'value': 'Egypt'},
+            {'title': 'Umm Al-Qura University, Makkah', 'value': 'Makkah'},
+        ], 'string');
+
+
+        let location_page = new PagePrefsGrid();
+        location_page.add_spin('Latitude', PrefsKeys.LATITUDE, {
+            lower: -90.0000,
+            upper: 90.0000,
+            step_increment: 0.0001
+        });
+
+        location_page.add_spin('Longitude', PrefsKeys.LONGITUDE, {
+            lower: -180.0000,
+            upper: 180.0000,
+            step_increment: 0.0001
+        });
+
+        location_page.add_combo('Timezone', PrefsKeys.TIMEZONE, [
+            {'title': 'Auto', 'value': 'auto'},
+            {'title': 'GMT -12:00', 'value': '-12'},
+            {'title': 'GMT -11:00', 'value': '-11'},
+            {'title': 'GMT -10:00', 'value': '-10'},
+            {'title': 'GMT -09:00', 'value': '-9'},
+            {'title': 'GMT -08:00', 'value': '-8'},
+            {'title': 'GMT -07:00', 'value': '-7'},
+            {'title': 'GMT -06:00', 'value': '-6'},
+            {'title': 'GMT -05:00', 'value': '-5'},
+            {'title': 'GMT -04:00', 'value': '-4'},
+            {'title': 'GMT -03:00', 'value': '-3'},
+            {'title': 'GMT -02:00', 'value': '-2'},
+            {'title': 'GMT -01:00', 'value': '-1'},
+            {'title': 'GMT +00:00', 'value': '0'},
+            {'title': 'GMT +01:00', 'value': '1'},
+            {'title': 'GMT +02:00', 'value': '2'},
+            {'title': 'GMT +03:00', 'value': '3'},
+            {'title': 'GMT +04:00', 'value': '4'},
+            {'title': 'GMT +05:00', 'value': '5'},
+            {'title': 'GMT +06:00', 'value': '6'},
+            {'title': 'GMT +07:00', 'value': '7'},
+            {'title': 'GMT +08:00', 'value': '8'},
+            {'title': 'GMT +09:00', 'value': '9'},
+            {'title': 'GMT +10:00', 'value': '10'},
+            {'title': 'GMT +11:00', 'value': '11'},
+            {'title': 'GMT +12:00', 'value': '12'},
         ], 'string');
 
         let pages = [
             {
-                name: 'General',
-                page: general_page
+                name: 'Calculation',
+                page: calculation_page
             },
             {
-                name: 'Memory',
-                page: memory_page
+                name: 'Your Location',
+                page: location_page
             }
         ];
 

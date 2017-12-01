@@ -1,50 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="gnome-shell-extensions">
   <schema path="/org/gnome/shell/extensions/azan/" id="org.gnome.shell.extensions.azan">
-    <key type="i" name="refresh-interval">
-        <default>2</default>
-        <summary>Refresh interval in seconds.</summary>
-        <description>Update the GUI after the given number of seconds.</description>
+
+    <key type="s" name="calculation-method">
+        <default>"MWL"</default>
+        <summary>Calculation method</summary>
+        <description>Calculation method</description>
     </key>
-    <key type="b" name="cpu-meter">
-        <default>true</default>
-        <summary>Enable CPU indicator.</summary>
-        <description>Turn on or off the CPU indicator.</description>
+
+    <key type="d" name="latitude">
+        <default>-6.3292</default>
+        <summary>Latitude</summary>
+        <description>Latitude of your location</description>
     </key>
-    <key type="b" name="memory-meter">
-        <default>true</default>
-        <summary>Enable memory indicator.</summary>
-        <description>Turn on or off the memory indicator.</description>
+
+    <key type="d" name="longitude">
+        <default>106.8567</default>
+        <summary>Longitude</summary>
+        <description>Longitude of your location</description>
     </key>
-    <key type="b" name="storage-meter">
-        <default>true</default>
-        <summary>Enable disk indicator.</summary>
-        <description>Turn on or off the local disk usage indicator.</description>
+
+    <key type="s" name="timezone">
+        <default>"auto"</default>
+        <summary>Timezone</summary>
+        <description>Timezone of your location</description>
     </key>
-    <key type="b" name="network-meter">
-        <default>true</default>
-        <summary>Enable network indicator.</summary>
-        <description>Turn on or off the network traffic indicator.</description>
-    </key>
-    <key type="b" name="swap-meter">
-        <default>true</default>
-        <summary>Enable swap indicator.</summary>
-        <description>Turn on or off the swap usage indicator.</description>
-    </key>
-    <key type="b" name="load-meter">
-        <default>true</default>
-        <summary>Enable system load indicator.</summary>
-        <description>Turn on or off the system load indicator.</description>
-    </key>
-    <key type="s" name="position">
-        <default>"center"</default>
-        <summary>Position on top bar.</summary>
-        <description>Controls the vertical alignment of the indicator widget on the top bar.</description>
-    </key>
-    <key type="s" name="memory-calculation-method">
-        <default>"ram_only"</default>
-        <summary>Memory calculation method for process list sorting.</summary>
-        <description>Controls which type of memory needs to be included when computing memory usage for a process.</description>
-    </key>
+
   </schema>
 </schemalist>
