@@ -11,16 +11,12 @@ const PopupMenu = imports.ui.popupMenu;
 const MessageTray = imports.ui.messageTray;
 const Util = imports.misc.util;
 
-const TW_URL = 'https://transferwise.com/api/v1/payment/calculate';
-const TW_AUTH_KEY = 'dad99d7d8e52c2c8aaf9fda788d8acdc';
-
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 
 const PrayTimes = Extension.imports.PrayTimes;
 const HijriCalendarKuwaiti = Extension.imports.HijriCalendarKuwaiti;
-
-
-let _httpSession;
+const Convenience = Extension.imports.convenience;
+const PrefsKeys = Extension.imports.prefs_keys;
 
 // const PrayMenuItem = new Lang.Class({
 //     Name: 'PrayMenuItem',
@@ -40,7 +36,7 @@ let _httpSession;
 
 
 const Azan = new Lang.Class({
-  Name: 'Azan',
+    Name: 'Azan',
   Extends: PanelMenu.Button,
 
   _init: function () {
@@ -60,6 +56,9 @@ const Azan = new Lang.Class({
     this._opt_latitude = null;
     this._opt_longitude = null;
     this._opt_timezone = null;
+
+      this._settings = Convenience.getSettings();
+      this._bindSettings();
 
     this._dateFormatFull = _("%A %B %e, %Y");
 
@@ -94,8 +93,6 @@ const Azan = new Lang.Class({
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
 
-      global.logError('### WHAAAAAT ###');
-
     // this.menu.addMenuItem(this._dateMenuItem);
     // this.menu.addMenuItem(new PopupMenu.PopupMenuItem(_("Fajr"), {
     //     reactive: false
@@ -104,8 +101,6 @@ const Azan = new Lang.Class({
     for (let prayerId in this._timeNames) {
 
         let prayerName = this._timeNames[prayerId];
-
-        global.log(prayerName);
 
         // ================================
         let prayMenuItem = new PopupMenu.PopupMenuItem(_(prayerName), {
@@ -143,12 +138,8 @@ const Azan = new Lang.Class({
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
     this.menu.addAction(_("Settings"), Lang.bind(this, function() {
-        // let command = "cinnamon-settings applets %s".format(this._metadata.uuid);
-        // Util.trySpawnCommandLine(command);
 
         // this._notify('Title Hello', 'body world');
-
-        // Main.notify(_("It's time for " ));
 
             Util.spawn(["gnome-shell-extension-prefs", Extension.metadata.uuid]);
     }));
@@ -156,31 +147,35 @@ const Azan = new Lang.Class({
     this._updateLabelPeriodic();
 
 
-      this._notifSource = new MessageTray.SystemNotificationSource();
-      Main.messageTray.add(this._notifSource);
+      // this._notifSource = new MessageTray.SystemNotificationSource();
+      // Main.messageTray.add(this._notifSource);
 
-
-    // this._refresh();
-
-
-
-      // switcherSettingsButton.connect('clicked', function () {
-      //     Util.spawn(["gnome-shell-extension-prefs", Extension.metadata.uuid]);
-      // });
   },
+
+    _bindSettings: function() {
+        this._settings.connect('changed::' + PrefsKeys.CALCULATION_METHOD, Lang.bind(this, function(settings, key) {
+            this._opt_calculationMethod = settings.get_string(key);
+            this._updateLabel();
+        }));
+        this._settings.connect('changed::' + PrefsKeys.LATITUDE, Lang.bind(this, function(settings, key) {
+            this._opt_latitude = settings.get_double(key);
+            this._updateLabel();
+        }));
+        this._settings.connect('changed::' + PrefsKeys.LONGITUDE, Lang.bind(this, function(settings, key) {
+            this._opt_longitude = settings.get_double(key);
+            this._updateLabel();
+        }));
+        this._settings.connect('changed::' + PrefsKeys.TIMEZONE, Lang.bind(this, function(settings, key) {
+            this._opt_timezone = settings.get_string(key);
+            this._updateLabel();
+        }));
+    },
 
     _notify: function(title, message) {
         let notification = new MessageTray.Notification(this._notifSource, title, message);
         notification.setTransient(false);
         this._notifSource.notify(notification);
     },
-
-  _refresh: function () {
-    this._loadData(this._refreshUI);
-    this._removeTimeout();
-    this._timeout = Mainloop.timeout_add_seconds(10, Lang.bind(this, this._refresh));
-    return true;
-  },
 
   _updateLabelPeriodic: function() {
       this._updateLabel();
@@ -264,15 +259,11 @@ const Azan = new Lang.Class({
 
       // Main.notify(_("It's time for " + this._timeNames[nearestPrayerId]));
 
-
-      // this.set_applet_label(this._timeNames[nearestPrayerId] + ' ' + timesStr[nearestPrayerId]);
       if (isTimeForPraying) {
           Main.notify(_("It's time for " + this._timeNames[nearestPrayerId]));
-          // this.set_applet_label(_("Now : " + this._timeNames[nearestPrayerId]));
           this.indicatorText.set_text(_("Now : " + this._timeNames[nearestPrayerId]));
 
       } else {
-          // this.set_applet_label(this._timeNames[nearestPrayerId] + ' -' + this._formatRemainingTimeFromMinutes(minDiffMinutes));
           this.indicatorText.set_text(this._timeNames[nearestPrayerId] + ' -' + this._formatRemainingTimeFromMinutes(minDiffMinutes));
       }
 
@@ -306,50 +297,9 @@ const Azan = new Lang.Class({
       return this._dayNames[hijriDate[4]] + ", " + hijriDate[5] + " " + this._monthNames[hijriDate[6]] + " " + hijriDate[7];
   },
 
-  _loadData: function () {
-    let params = {
-      amount: '1000',
-      sourceCurrency: 'CHF',
-      targetCurrency: 'EUR'
-    };
-    _httpSession = new Soup.Session();
-    let message = Soup.form_request_new_from_hash('GET', TW_URL, params);
-    message.request_headers.append("X-Authorization-key", TW_AUTH_KEY);
-    _httpSession.queue_message(message, Lang.bind(this, function (_httpSession, message) {
-          if (message.status_code !== 200)
-            return;
-          let json = JSON.parse(message.response_body.data);
-          this._refreshUI(json);
-        }
-      )
-    );
-  },
-
-  _refreshUI: function (data) {
-    let txt = data.transferwisePayOut.toString();
-    txt = txt.substring(0,6) + ' CACA';
-    global.log(txt);
-    this.indicatorText.set_text(txt);
-  },
-
-  _removeTimeout: function () {
-    if (this._timeout) {
-      Mainloop.source_remove(this._timeout);
-      this._timeout = null;
-    }
-  },
-
   stop: function () {
-    if (_httpSession !== undefined)
-      _httpSession.abort();
-    _httpSession = undefined;
-
-    if (this._timeout)
-      Mainloop.source_remove(this._timeout);
-    this._timeout = undefined;
 
     this.menu.removeAll();
-
 
     if (this._periodicTimeoutId) {
         Mainloop.source_remove(this._periodicTimeoutId);
