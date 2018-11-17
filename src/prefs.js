@@ -299,15 +299,25 @@ const AzanPrefsWidget = new GObject.Class({
             {'title': 'GMT +14:00', 'value': '14'}
         ], 'string');
 
+        let display_page = new PagePrefsGrid();
+        display_page.add_combo('Which times?', PrefsKeys.CONCISE_LIST, [
+          {'title': 'All times', 'value': '0'},
+          {'title': 'Concise', 'value': '1'}
+        ], 'string');
+
         let pages = [
-            {
-                name: 'Calculation',
-                page: calculation_page
-            },
-            {
-                name: 'Your Location',
-                page: location_page
-            }
+          {
+            name: 'Calculation',
+            page: calculation_page
+          },
+          {
+            name: 'Your Location',
+            page: location_page
+          },
+          {
+            name: 'Display',
+            page: display_page
+          }
         ];
 
         return pages;

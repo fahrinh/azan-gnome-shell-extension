@@ -60,6 +60,7 @@ const Azan = new Lang.Class({
     this._opt_longitude = null;
     this._opt_timezone = null;
     this._opt_timeformat12 = false;
+    this._opt_concise_list = null;
 
     this._settings = Convenience.getSettings();
     this._bindSettings();
@@ -85,6 +86,18 @@ const Azan = new Lang.Class({
         maghrib: 'Maghrib',
         isha: 'Isha',
         midnight: 'Midnight'
+    };
+
+    this._timeConciseLevels = {
+      imsak: 0,
+      fajr: 1,
+      sunrise: 0,
+      dhuhr: 1,
+      asr: 1,
+      sunset: 0,
+      maghrib: 1,
+      isha: 1,
+      midnight: 0
     };
 
     this._prayItems = {};
@@ -235,6 +248,7 @@ const Azan = new Lang.Class({
     this._opt_longitude = this._settings.get_double(PrefsKeys.LONGITUDE);
     this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORAMT_12);
     this._opt_timezone = this._settings.get_double(PrefsKeys.TIMEZONE);
+    this._opt_concise_list = this._settings.get_string(PrefsKeys.CONCISE_LIST);
   },
   _bindSettings: function() {
     this._settings.connect('changed::' + PrefsKeys.AUTO_LOCATION, Lang.bind(this, function(settings, key) {
@@ -267,6 +281,22 @@ const Azan = new Lang.Class({
 
         this._updateLabel();
     }));
+
+    this._settings.connect('changed::' + PrefsKeys.CONCISE_LIST, Lang.bind(this, function(settings, key) {
+      this._opt_concise_list = settings.get_string(key);
+      this._updateLabel();
+      this._updatePrayerVisibility();
+    }));
+  },
+
+  _updatePrayerVisibility : function () {
+    for (let prayerId in this._timeNames) {
+      this._prayItems[prayerId].menuItem.actor.visible = this._isVisiblePrayer(prayerId);
+    }
+  },
+
+  _isVisiblePrayer : function(prayerId) {
+    return this._timeConciseLevels[prayerId] >= this._opt_concise_list;
   },
 
   _notify: function(title, message) {

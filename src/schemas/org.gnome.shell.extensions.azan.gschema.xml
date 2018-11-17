@@ -38,5 +38,9 @@
         <description>Timezone of your location</description>
     </key>
 
+    <key type="s" name="concise-list">
+      <default>"all"</default>
+      <summary>Which times to show</summary>
+    </key>
   </schema>
 </schemalist>
