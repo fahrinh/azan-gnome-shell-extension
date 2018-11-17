@@ -37,7 +37,7 @@ const PrefsKeys = Extension.imports.prefs_keys;
 
 const Azan = new Lang.Class({
     Name: 'Azan',
-  Extends: PanelMenu.Button,
+    Extends: PanelMenu.Button,
 
   _init: function () {
     this.parent(0.0, "Azan", false);
@@ -46,7 +46,6 @@ const Azan = new Lang.Class({
       y_align: Clutter.ActorAlign.CENTER
     });
     this.actor.add_actor(this.indicatorText);
-
 
     // this._item = new PopupMenu.PopupMenuItem('test');
     // this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -57,12 +56,13 @@ const Azan = new Lang.Class({
     this._opt_longitude = null;
     this._opt_timezone = null;
 
-      this._settings = Convenience.getSettings();
-      this._bindSettings();
+    this._settings = Convenience.getSettings();
+    this._bindSettings();
+    this._loadSettings();
 
     this._dateFormatFull = _("%A %B %e, %Y");
 
-    this._prayTimes = new PrayTimes.PrayTimes('ISNA');   
+    this._prayTimes = new PrayTimes.PrayTimes('ISNA');
 
 
     this._dayNames = new Array("Ahad", "Ithnin", "Thulatha", "Arbaa", "Khams", "Jumuah", "Sabt");
@@ -116,7 +116,7 @@ const Azan = new Lang.Class({
         bin.add_actor(prayLabel);
 
         prayMenuItem.actor.add_actor(bin);
-        
+
         //==============================
         // let prayLabel = new St.Label();
         // prayMenuItem.actor.add_actor(prayLabel, {align: St.Align.END});
@@ -141,7 +141,7 @@ const Azan = new Lang.Class({
 
         // this._notify('Title Hello', 'body world');
 
-            Util.spawn(["gnome-shell-extension-prefs", Extension.metadata.uuid]);
+        Util.spawn(["gnome-shell-extension-prefs", Extension.metadata.uuid]);
     }));
 
     this._updateLabelPeriodic();
@@ -152,23 +152,33 @@ const Azan = new Lang.Class({
 
   },
 
-    _bindSettings: function() {
-        this._settings.connect('changed::' + PrefsKeys.CALCULATION_METHOD, Lang.bind(this, function(settings, key) {
-            this._opt_calculationMethod = settings.get_string(key);
-            this._updateLabel();
-        }));
-        this._settings.connect('changed::' + PrefsKeys.LATITUDE, Lang.bind(this, function(settings, key) {
-            this._opt_latitude = settings.get_double(key);
-            this._updateLabel();
-        }));
-        this._settings.connect('changed::' + PrefsKeys.LONGITUDE, Lang.bind(this, function(settings, key) {
-            this._opt_longitude = settings.get_double(key);
-            this._updateLabel();
-        }));
-        this._settings.connect('changed::' + PrefsKeys.TIMEZONE, Lang.bind(this, function(settings, key) {
-            this._opt_timezone = settings.get_string(key);
-            this._updateLabel();
-        }));
+  _loadSettings: function() {
+    this._opt_calculationMethod = this._settings.get_string(PrefsKeys.CALCULATION_METHOD);
+    this._opt_latitude = this._settings.get_double(PrefsKeys.LATITUDE);
+    this._opt_longitude = this._settings.get_double(PrefsKeys.LONGITUDE);
+    this._opt_timezone = this._settings.get_double(PrefsKeys.TIMEZONE);
+  },
+  _bindSettings: function() {
+      this._settings.connect('changed::' + PrefsKeys.CALCULATION_METHOD, Lang.bind(this, function(settings, key) {
+          this._opt_calculationMethod = settings.get_string(key);
+
+          this._updateLabel();
+      }));
+      this._settings.connect('changed::' + PrefsKeys.LATITUDE, Lang.bind(this, function(settings, key) {
+          this._opt_latitude = settings.get_double(key);
+
+          this._updateLabel();
+      }));
+      this._settings.connect('changed::' + PrefsKeys.LONGITUDE, Lang.bind(this, function(settings, key) {
+          this._opt_longitude = settings.get_double(key);
+
+          this._updateLabel();
+      }));
+      this._settings.connect('changed::' + PrefsKeys.TIMEZONE, Lang.bind(this, function(settings, key) {
+          this._opt_timezone = settings.get_string(key);
+
+          this._updateLabel();
+      }));
     },
 
     _notify: function(title, message) {
