@@ -46,12 +46,16 @@ const PagePrefsGrid = new GObject.Class({
         return this.add_row(text, item);
     },
 
-    add_boolean: function(text, key) {
+    add_boolean: function(text, key, callback) {
         let item = new Gtk.Switch({
             active: this._settings.get_boolean(key)
         });
-        this._settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
+        if (callback) {
+          callback(item, this._settings.get_boolean(key))
+        }
+
+        this._settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
         return this.add_row(text, item);
     },
 
@@ -114,6 +118,10 @@ const PagePrefsGrid = new GObject.Class({
             if(this._settings.get_double(key) !== value) {
                 this._settings.set_double(key, value);
             }
+        }));
+
+        this._settings.connect('change-event', Lang.bind(this, function(settings, key_set) {
+          spin_button.set_value(this._settings.get_double(key));
         }));
 
         return this.add_row(label, spin_button, true);
@@ -226,17 +234,27 @@ const AzanPrefsWidget = new GObject.Class({
 
 
         let location_page = new PagePrefsGrid();
-        location_page.add_spin('Latitude', PrefsKeys.LATITUDE, {
+
+        this.latitude_box = location_page.add_spin('Latitude', PrefsKeys.LATITUDE, {
             lower: -90.0000,
             upper: 90.0000,
             step_increment: 0.0001
         });
 
-        location_page.add_spin('Longitude', PrefsKeys.LONGITUDE, {
+        this.longitude_box = location_page.add_spin('Longitude', PrefsKeys.LONGITUDE, {
             lower: -180.0000,
             upper: 180.0000,
             step_increment: 0.0001
         });
+
+        let updateLocationState = Lang.bind(this, function(entry,state) {
+          this.latitude_box.set_sensitive(!state);
+          this.longitude_box.set_sensitive(!state);
+        })
+
+        this.auto_location = location_page.add_boolean('Automatic location', PrefsKeys.AUTO_LOCATION, updateLocationState);
+
+        this.auto_location.connect('state-set', updateLocationState);
 
         location_page.add_combo('Timezone', PrefsKeys.TIMEZONE, [
             {'title': 'Auto', 'value': 'auto'},
