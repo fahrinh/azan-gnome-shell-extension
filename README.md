@@ -10,16 +10,17 @@ Azan is an Islamic prayer times extension for Gnome Shell.
 - Show remaining time for the upcoming prayer.
 - Show current date in Hijri calendar.
 - Display a notification when it's time for prayer.
+- Automatic location detection
 
 ### Installation
 
 1. Download zip file : https://extensions.gnome.org/extension/1344/azan/ 
-2. Extract to `~/.local/share/gnome-shell/ext
-ensions/` 
+2. Extract to `~/.local/share/gnome-shell/extensions/` 
 
 ### Changelog
 
 - 0.1 : initial upload
+- 1.1 : Add automatic location detection & bugfixes
 
 ### License
 
