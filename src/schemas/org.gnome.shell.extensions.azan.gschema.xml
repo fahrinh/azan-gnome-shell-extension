@@ -26,6 +26,12 @@
         <description>Longitude of your location</description>
     </key>
 
+    <key type="b" name="time-format-12">
+        <default>false</default>
+        <summary>AM/PM time format</summary>
+        <description>Set time format to AM/PM hours</description>
+    </key>
+
     <key type="s" name="timezone">
         <default>"auto"</default>
         <summary>Timezone</summary>

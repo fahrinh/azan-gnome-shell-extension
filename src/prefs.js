@@ -254,6 +254,8 @@ const AzanPrefsWidget = new GObject.Class({
 
         this.auto_location = location_page.add_boolean('Automatic location', PrefsKeys.AUTO_LOCATION, updateLocationState);
 
+        this.time_format_12 = location_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORAMT_12);
+
         this.auto_location.connect('state-set', updateLocationState);
 
         location_page.add_combo('Timezone', PrefsKeys.TIMEZONE, [
