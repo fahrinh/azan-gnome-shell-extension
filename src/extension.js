@@ -163,6 +163,7 @@ const Azan = new Lang.Class({
     }));
 
     this._updateLabelPeriodic();
+    this._updatePrayerVisibility();
 
     this._permStore = new PermissionStore.PermissionStore((proxy, error) => {
         if (error) {
