@@ -59,6 +59,7 @@ const Azan = new Lang.Class({
     this._opt_latitude = null;
     this._opt_longitude = null;
     this._opt_timezone = null;
+    this._opt_timeformat12 = false;
 
     this._settings = Convenience.getSettings();
     this._bindSettings();
@@ -232,6 +233,7 @@ const Azan = new Lang.Class({
     this._updateAutoLocation();
     this._opt_latitude = this._settings.get_double(PrefsKeys.LATITUDE);
     this._opt_longitude = this._settings.get_double(PrefsKeys.LONGITUDE);
+    this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORAMT_12);
     this._opt_timezone = this._settings.get_double(PrefsKeys.TIMEZONE);
   },
   _bindSettings: function() {
@@ -254,6 +256,10 @@ const Azan = new Lang.Class({
     this._settings.connect('changed::' + PrefsKeys.LONGITUDE, Lang.bind(this, function(settings, key) {
         this._opt_longitude = settings.get_double(key);
 
+        this._updateLabel();
+    }));
+    this._settings.connect('changed::' + PrefsKeys.TIME_FORAMT_12, Lang.bind(this, function(settings, key) {
+        this._opt_timeformat12 = settings.get_boolean(key);
         this._updateLabel();
     }));
     this._settings.connect('changed::' + PrefsKeys.TIMEZONE, Lang.bind(this, function(settings, key) {
@@ -289,7 +295,14 @@ const Azan = new Lang.Class({
 
       let currentSeconds = this._calculateSecondsFromDate(currentDate);
 
-      let timesStr = this._prayTimes.getTimes(currentDate, myLocation, myTimezone, 'auto', '24h');
+      let timesStr;
+
+      if (this._opt_timeformat12) {
+        timesStr = this._prayTimes.getTimes(currentDate, myLocation, myTimezone, 'auto', '12h');
+      } else {
+        timesStr = this._prayTimes.getTimes(currentDate, myLocation, myTimezone, 'auto', '24h');
+      }
+
       let timesFloat = this._prayTimes.getTimes(currentDate, myLocation, myTimezone, 'auto', 'Float');
 
       let nearestPrayerId;
