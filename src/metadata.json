@@ -1,5 +1,5 @@
 {
-  "description": "Azan is an Islamic prayer times extension for Gnome Shell.\n\nFeatures\n- List 5 prayer times + other necessary times in Islam (Imsak, Sunrise, Sunset, Midnight).\n- Show remaining time for the upcoming prayer.\n- Show current date in Hijri calendar.\n- Display a notification when it's time for prayer.\n- Automatic Geoclue2 location detection",
+  "description": "Azan is an Islamic prayer times extension for Gnome Shell based on the extension by Fahrinh.\n\nFeatures\n- List compulsory prayer times\n Optionally display Imsak, Sunrise, Sunset and Midnight\n- Show remaining time for the upcoming prayer.\n- Show current date in Hijri calendar.\n- Display a notification when it's time for prayer.\n- Automatic Geoclue2 location detection\n- Show times in 24 hour and 12 hour formats",
   "name": "Azan Islamic Prayer Times",
   "settings-schema": "org.gnome.shell.extensions.azan",
   "shell-version": [
