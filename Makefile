@@ -10,7 +10,7 @@ ABS_MKFILE_DIR := $(abspath $(MKFILE_DIR))
 ABS_BUILDDIR=$(ABS_MKFILE_DIR)/$(BUILDDIR)
 #=============================================================================
 default_target: all
-.PHONY: clean all zip
+.PHONY: clean all zip install
 
 clean:
 	rm -rf $(BUILDDIR)
@@ -27,3 +27,6 @@ zip: all
 	(cd $(BUILDDIR)/$(UUID); \
          zip -rq $(ABS_BUILDDIR)/$(UUID).zip $(FILES:%=%); \
         );
+
+install: all
+	 cp -rp build/azan@faissal.bensefia.id ~/.local/share/gnome-shell/extensions
