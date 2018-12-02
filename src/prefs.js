@@ -46,12 +46,16 @@ const PagePrefsGrid = new GObject.Class({
         return this.add_row(text, item);
     },
 
-    add_boolean: function(text, key) {
+    add_boolean: function(text, key, callback) {
         let item = new Gtk.Switch({
             active: this._settings.get_boolean(key)
         });
-        this._settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
+        if (callback) {
+          callback(item, this._settings.get_boolean(key))
+        }
+
+        this._settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
         return this.add_row(text, item);
     },
 
@@ -114,6 +118,10 @@ const PagePrefsGrid = new GObject.Class({
             if(this._settings.get_double(key) !== value) {
                 this._settings.set_double(key, value);
             }
+        }));
+
+        this._settings.connect('change-event', Lang.bind(this, function(settings, key_set) {
+          spin_button.set_value(this._settings.get_double(key));
         }));
 
         return this.add_row(label, spin_button, true);
@@ -226,29 +234,41 @@ const AzanPrefsWidget = new GObject.Class({
 
 
         let location_page = new PagePrefsGrid();
-        location_page.add_spin('Latitude', PrefsKeys.LATITUDE, {
+
+        this.latitude_box = location_page.add_spin('Latitude', PrefsKeys.LATITUDE, {
             lower: -90.0000,
             upper: 90.0000,
             step_increment: 0.0001
         });
 
-        location_page.add_spin('Longitude', PrefsKeys.LONGITUDE, {
+        this.longitude_box = location_page.add_spin('Longitude', PrefsKeys.LONGITUDE, {
             lower: -180.0000,
             upper: 180.0000,
             step_increment: 0.0001
         });
+
+        let updateLocationState = Lang.bind(this, function(entry,state) {
+          this.latitude_box.set_sensitive(!state);
+          this.longitude_box.set_sensitive(!state);
+        })
+
+        this.auto_location = location_page.add_boolean('Automatic location', PrefsKeys.AUTO_LOCATION, updateLocationState);
+
+        this.auto_location.connect('state-set', updateLocationState);
 
         location_page.add_combo('Timezone', PrefsKeys.TIMEZONE, [
             {'title': 'Auto', 'value': 'auto'},
             {'title': 'GMT -12:00', 'value': '-12'},
             {'title': 'GMT -11:00', 'value': '-11'},
             {'title': 'GMT -10:00', 'value': '-10'},
+            {'title': 'GMT -09:30', 'value': '-9.5'},
             {'title': 'GMT -09:00', 'value': '-9'},
             {'title': 'GMT -08:00', 'value': '-8'},
             {'title': 'GMT -07:00', 'value': '-7'},
             {'title': 'GMT -06:00', 'value': '-6'},
             {'title': 'GMT -05:00', 'value': '-5'},
             {'title': 'GMT -04:00', 'value': '-4'},
+            {'title': 'GMT -03:30', 'value': '-3.5'},
             {'title': 'GMT -03:00', 'value': '-3'},
             {'title': 'GMT -02:00', 'value': '-2'},
             {'title': 'GMT -01:00', 'value': '-1'},
@@ -256,26 +276,49 @@ const AzanPrefsWidget = new GObject.Class({
             {'title': 'GMT +01:00', 'value': '1'},
             {'title': 'GMT +02:00', 'value': '2'},
             {'title': 'GMT +03:00', 'value': '3'},
+            {'title': 'GMT +03:30', 'value': '3.5'},
             {'title': 'GMT +04:00', 'value': '4'},
+            {'title': 'GMT +04:30', 'value': '4'},
             {'title': 'GMT +05:00', 'value': '5'},
+            {'title': 'GMT +05:30', 'value': '5.5'},
+            {'title': 'GMT +05:45', 'value': '5.75'},
             {'title': 'GMT +06:00', 'value': '6'},
+            {'title': 'GMT +06:30', 'value': '6.5'},
             {'title': 'GMT +07:00', 'value': '7'},
             {'title': 'GMT +08:00', 'value': '8'},
+            {'title': 'GMT +08:45', 'value': '8.75'},
             {'title': 'GMT +09:00', 'value': '9'},
+            {'title': 'GMT +09:30', 'value': '9.5'},
             {'title': 'GMT +10:00', 'value': '10'},
+            {'title': 'GMT +10:30', 'value': '10.5'},
             {'title': 'GMT +11:00', 'value': '11'},
             {'title': 'GMT +12:00', 'value': '12'},
+            {'title': 'GMT +13:00', 'value': '13'},
+            {'title': 'GMT +14:00', 'value': '14'}
+        ], 'string');
+
+        let display_page = new PagePrefsGrid();
+
+        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORAMT_12);
+
+        display_page.add_combo('Which times?', PrefsKeys.CONCISE_LIST, [
+          {'title': 'All times', 'value': '0'},
+          {'title': 'Concise', 'value': '1'}
         ], 'string');
 
         let pages = [
-            {
-                name: 'Calculation',
-                page: calculation_page
-            },
-            {
-                name: 'Your Location',
-                page: location_page
-            }
+          {
+            name: 'Calculation',
+            page: calculation_page
+          },
+          {
+            name: 'Your Location',
+            page: location_page
+          },
+          {
+            name: 'Display',
+            page: display_page
+          }
         ];
 
         return pages;
