@@ -254,7 +254,7 @@ const Azan = new Lang.Class({
   _bindSettings: function() {
     this._settings.connect('changed::' + PrefsKeys.AUTO_LOCATION, Lang.bind(this, function(settings, key) {
         this._opt_autoLocation = settings.get_boolean(key);
-        this._updateLocationMonitoring();
+        this._updateAutoLocation();
         this._updateLabel();
     }));
 
