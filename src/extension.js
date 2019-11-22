@@ -359,21 +359,19 @@ const Azan = new Lang.Class({
 
               let diffSeconds = prayerSeconds - currentSeconds;
 
+              if (diffSeconds < 0 && diffSeconds > -60) {
+                isTimeForPraying = true;
+                nearestPrayerId = prayerId;
+                break;
+              }
+
               if (diffSeconds > 0) {
                   let diffMinutes = ~~(diffSeconds / 60);
 
-                  if (diffMinutes == 0) {
-                      isTimeForPraying = true;
-                      nearestPrayerId = prayerId;
-                      break;
-                  } else if (diffMinutes <= minDiffMinutes) {
+                  if (diffMinutes <= minDiffMinutes) {
                       minDiffMinutes = diffMinutes;
                       nearestPrayerId = prayerId;
                   }
-
-                  // global.logError("prayerId: %s, diffSeconds: %s, diffMinutes: %s, minDiffMinutes: %s, isTimeForPraying: %s, nearestPrayerId: %s".format(
-                  //     prayerId, diffSeconds, diffMinutes, minDiffMinutes, isTimeForPraying, nearestPrayerId
-                  //     ));
               }
 
           }
