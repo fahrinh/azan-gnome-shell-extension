@@ -299,7 +299,7 @@ const AzanPrefsWidget = new GObject.Class({
 
         let display_page = new PagePrefsGrid();
 
-        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORAMT_12);
+        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORMAT_12);
 
         display_page.add_combo('Which times?', PrefsKeys.CONCISE_LIST, [
           {'title': 'All times', 'value': '0'},
