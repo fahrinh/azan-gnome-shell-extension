@@ -247,8 +247,8 @@ const Azan = new Lang.Class({
     this._updateAutoLocation();
     this._opt_latitude = this._settings.get_double(PrefsKeys.LATITUDE);
     this._opt_longitude = this._settings.get_double(PrefsKeys.LONGITUDE);
-    this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORAMT_12);
-    this._opt_timezone = this._settings.get_double(PrefsKeys.TIMEZONE);
+    this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORMAT_12);
+    this._opt_timezone = this._settings.get_string(PrefsKeys.TIMEZONE);
     this._opt_concise_list = this._settings.get_string(PrefsKeys.CONCISE_LIST);
   },
   _bindSettings: function() {
@@ -273,7 +273,7 @@ const Azan = new Lang.Class({
 
         this._updateLabel();
     }));
-    this._settings.connect('changed::' + PrefsKeys.TIME_FORAMT_12, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.TIME_FORMAT_12, Lang.bind(this, function(settings, key) {
         this._opt_timeformat12 = settings.get_boolean(key);
         this._updateLabel();
     }));
