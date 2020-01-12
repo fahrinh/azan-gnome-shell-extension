@@ -247,8 +247,8 @@ const Azan = new Lang.Class({
     this._updateAutoLocation();
     this._opt_latitude = this._settings.get_double(PrefsKeys.LATITUDE);
     this._opt_longitude = this._settings.get_double(PrefsKeys.LONGITUDE);
-    this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORAMT_12);
-    this._opt_timezone = this._settings.get_double(PrefsKeys.TIMEZONE);
+    this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORMAT_12);
+    this._opt_timezone = this._settings.get_string(PrefsKeys.TIMEZONE);
     this._opt_concise_list = this._settings.get_string(PrefsKeys.CONCISE_LIST);
   },
   _bindSettings: function() {
@@ -273,7 +273,7 @@ const Azan = new Lang.Class({
 
         this._updateLabel();
     }));
-    this._settings.connect('changed::' + PrefsKeys.TIME_FORAMT_12, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.TIME_FORMAT_12, Lang.bind(this, function(settings, key) {
         this._opt_timeformat12 = settings.get_boolean(key);
         this._updateLabel();
     }));
@@ -359,21 +359,19 @@ const Azan = new Lang.Class({
 
               let diffSeconds = prayerSeconds - currentSeconds;
 
+              if (diffSeconds < 0 && diffSeconds > -60) {
+                isTimeForPraying = true;
+                nearestPrayerId = prayerId;
+                break;
+              }
+
               if (diffSeconds > 0) {
                   let diffMinutes = ~~(diffSeconds / 60);
 
-                  if (diffMinutes == 0) {
-                      isTimeForPraying = true;
-                      nearestPrayerId = prayerId;
-                      break;
-                  } else if (diffMinutes <= minDiffMinutes) {
+                  if (diffMinutes <= minDiffMinutes) {
                       minDiffMinutes = diffMinutes;
                       nearestPrayerId = prayerId;
                   }
-
-                  // global.logError("prayerId: %s, diffSeconds: %s, diffMinutes: %s, minDiffMinutes: %s, isTimeForPraying: %s, nearestPrayerId: %s".format(
-                  //     prayerId, diffSeconds, diffMinutes, minDiffMinutes, isTimeForPraying, nearestPrayerId
-                  //     ));
               }
 
           }

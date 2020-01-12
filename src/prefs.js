@@ -4,6 +4,7 @@ const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
 const Params = imports.misc.params;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+const PrayTimes = Me.imports.PrayTimes;
 const Convenience = Me.imports.convenience;
 const PrefsKeys = Me.imports.prefs_keys;
 
@@ -225,12 +226,13 @@ const AzanPrefsWidget = new GObject.Class({
     _get_tab_config: function() {
 
         let calculation_page = new PagePrefsGrid();
-        calculation_page.add_combo('Calculation method', PrefsKeys.CALCULATION_METHOD, [
-            {'title': 'Muslim World League', 'value': 'MWL'},
-            {'title': 'Islamic Society of North America (ISNA)', 'value': 'ISNA'},
-            {'title': 'Egyptian General Authority of Survey', 'value': 'Egypt'},
-            {'title': 'Umm Al-Qura University, Makkah', 'value': 'Makkah'},
-        ], 'string');
+        calculation_page.add_combo('Calculation method',
+          PrefsKeys.CALCULATION_METHOD,
+          Object
+            .entries(PrayTimes.getMethods())
+            .map(([value,{name}]) => ({value, title: name})),
+          'string'
+        );
 
 
         let location_page = new PagePrefsGrid();
@@ -299,7 +301,7 @@ const AzanPrefsWidget = new GObject.Class({
 
         let display_page = new PagePrefsGrid();
 
-        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORAMT_12);
+        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORMAT_12);
 
         display_page.add_combo('Which times?', PrefsKeys.CONCISE_LIST, [
           {'title': 'All times', 'value': '0'},
