@@ -5,7 +5,7 @@
   "shell-version": [
     "3.28.3", "3.26.1"
   ],
-  "url": "https://github.com/faissaloo/azan-gnome-shell-extension",
+  "url": "https://github.com/mhgharieb/azan-gnome-shell-extension",
   "uuid": "azan@faissal.bensefia.id",
-  "version": 4
+  "version": 5
 }

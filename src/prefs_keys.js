@@ -5,3 +5,4 @@ var LONGITUDE = 'longitude';
 var TIMEZONE = 'timezone';
 var TIME_FORMAT_12 = 'time-format-12';
 var CONCISE_LIST = 'concise-list';
+var HIJRI_DATE_ADJUSTMENT = 'hijri-date-adjustment';
