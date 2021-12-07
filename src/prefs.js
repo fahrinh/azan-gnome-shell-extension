@@ -133,7 +133,7 @@ const PagePrefsGrid = new GObject.Class({
             hexpand: true,
             halign: Gtk.Align.START
         });
-        label.set_line_wrap(wrap || false);
+        //label.set_line_wrap(wrap || false);
 
         this.attach(label, 0, this._rownum, 1, 1); // col, row, colspan, rowspan
         this.attach(widget, 1, this._rownum, 1, 1);
@@ -209,17 +209,16 @@ const AzanPrefsWidget = new GObject.Class({
         });
 
         let stack_switcher = new Gtk.StackSwitcher({
-            margin_left: 5,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_right: 5,
+            //margin_left: 5,
+            //margin_bottom: 5,
+            //margin_right: 5,
             stack: stack
         });
 
         this._init_stack(stack);
 
-        this.add(stack_switcher);
-        this.add(stack);
+        //this.add(stack_switcher);
+        //this.add(stack);
     },
 
     _get_tab_config: function() {
@@ -338,7 +337,7 @@ function init() {
 
 function buildPrefsWidget() {
     let widget = new AzanPrefsWidget();
-    widget.show_all();
+    //widget.show_all();
 
     return widget;
 }
