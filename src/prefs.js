@@ -4,6 +4,7 @@ const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
 const Params = imports.misc.params;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+const PrayTimes = Me.imports.PrayTimes;
 const Convenience = Me.imports.convenience;
 const PrefsKeys = Me.imports.prefs_keys;
 
@@ -133,7 +134,6 @@ const PagePrefsGrid = new GObject.Class({
             hexpand: true,
             halign: Gtk.Align.START
         });
-        label.set_line_wrap(wrap || false);
 
         this.attach(label, 0, this._rownum, 1, 1); // col, row, colspan, rowspan
         this.attach(widget, 1, this._rownum, 1, 1);
@@ -209,31 +209,49 @@ const AzanPrefsWidget = new GObject.Class({
         });
 
         let stack_switcher = new Gtk.StackSwitcher({
-            margin_left: 5,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_right: 5,
             stack: stack
         });
 
         this._init_stack(stack);
 
-        this.add(stack_switcher);
-        this.add(stack);
+        this.set_margin_start(5);
+        this.set_margin_end(5);
+        this.set_margin_top(5);
+        this.set_margin_bottom(5);
+
+        this.append(stack_switcher);
+        this.append(stack);
     },
 
     _get_tab_config: function() {
 
         let calculation_page = new PagePrefsGrid();
-        calculation_page.add_combo('Calculation method', PrefsKeys.CALCULATION_METHOD, [
-            {'title': 'Muslim World League', 'value': 'MWL'},
-            {'title': 'Islamic Society of North America (ISNA)', 'value': 'ISNA'},
-            {'title': 'Egyptian General Authority of Survey', 'value': 'Egypt'},
-            {'title': 'Umm Al-Qura University, Makkah', 'value': 'Makkah'},
-        ], 'string');
+        calculation_page.set_margin_top(10);
+        calculation_page.set_margin_start(5);
+        calculation_page.set_margin_end(5);
 
+        calculation_page.add_combo('Calculation method',
+          PrefsKeys.CALCULATION_METHOD,
+          Object
+            .entries(PrayTimes.getMethods())
+            .map(([value,{name}]) => ({value, title: name})),
+          'string'
+        );
+
+        calculation_page.add_range('Adjustment days', PrefsKeys.ADJUSTMENT, {
+            min: -2,
+            max: 2,
+            step: 1,
+            mark_position: 0,
+            add_mark: true,
+            size: 200,
+            draw_value: true
+        });
 
         let location_page = new PagePrefsGrid();
+        location_page.set_margin_top(10);
+        location_page.set_margin_start(5);
+        location_page.set_margin_end(5);
 
         this.latitude_box = location_page.add_spin('Latitude', PrefsKeys.LATITUDE, {
             lower: -90.0000,
@@ -298,8 +316,11 @@ const AzanPrefsWidget = new GObject.Class({
         ], 'string');
 
         let display_page = new PagePrefsGrid();
+        display_page.set_margin_top(10);
+        display_page.set_margin_start(5);
+        display_page.set_margin_end(5);
 
-        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORAMT_12);
+        this.time_format_12 = display_page.add_boolean('AM/PM time format', PrefsKeys.TIME_FORMAT_12);
 
         display_page.add_combo('Which times?', PrefsKeys.CONCISE_LIST, [
           {'title': 'All times', 'value': '0'},
@@ -338,7 +359,7 @@ function init() {
 
 function buildPrefsWidget() {
     let widget = new AzanPrefsWidget();
-    widget.show_all();
+    widget.show();
 
     return widget;
 }
