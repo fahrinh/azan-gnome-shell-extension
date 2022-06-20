@@ -27,13 +27,9 @@ class Azan extends PanelMenu.Button {
   _init() {
     super._init(0.0, _('Azan'));
 
-    let box = new St.BoxLayout({ vertical: false, style_class: 'panel-status-menu-box' });
-    
     this.indicatorText = new St.Label({text: _("Loading..."), y_align: Clutter.ActorAlign.CENTER});
-	 box.add_child(this.indicatorText);
+    this.add_child(this.indicatorText);
 
-	this.add_child(box);
-		
     this._gclueLocationChangedId = 0;
     this._weatherAuthorized = false;
 
