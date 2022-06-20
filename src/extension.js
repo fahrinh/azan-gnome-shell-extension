@@ -29,33 +29,10 @@ class Azan extends PanelMenu.Button {
 
     let box = new St.BoxLayout({ vertical: false, style_class: 'panel-status-menu-box' });
     
-    let hijriDate = HijriCalendarKuwaiti.KuwaitiCalendar(this._opt_adjustment);      
-    if (hijriDate[5] <= 1) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_0'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 4) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_1'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 8) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_2'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 12) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_3'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 15) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_4'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 19) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_5'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 23) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_6'), style_class: 'system-status-icon'});
-    } else if (hijriDate[5] <= 26) {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_7'), style_class: 'system-status-icon'});
-    } else {
-       this.indicatorIcon = new St.Icon({gicon: this._getCustIcon('indicator-prayer-times_0'), style_class: 'system-status-icon'});
-    }
-    
-    box.add_child(this.indicatorIcon);
-
     this.indicatorText = new St.Label({text: _("Loading..."), y_align: Clutter.ActorAlign.CENTER});
 	 box.add_child(this.indicatorText);
 
-	 this.add_child(box);
+	this.add_child(box);
 		
     this._gclueLocationChangedId = 0;
     this._weatherAuthorized = false;
@@ -160,12 +137,7 @@ class Azan extends PanelMenu.Button {
         });
     });
   }
-  
-	_getCustIcon(icon_name) {
-		let gicon = Gio.icon_new_for_string( Extension.dir.get_child('icons').get_path() + "/" + icon_name + ".svg" );
-		return gicon;
-	}
-  
+    
   _startGClueService() {
     if (this._gclueStarting)
         return;

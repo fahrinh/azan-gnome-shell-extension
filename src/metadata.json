@@ -3,7 +3,10 @@
   "name": "Azan Islamic Prayer Times",
   "settings-schema": "org.gnome.shell.extensions.azan",
   "shell-version": [
+  	"3.36.1",
+  	"3.38.0",
     "40.0",
+    "41.0",
     "42.0"
   ],
   "url": "https://github.com/raihan/azan-gnome-shell-extension",
