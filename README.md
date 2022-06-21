@@ -1,7 +1,7 @@
 ### Description
 
 Azan is an Islamic prayer times extension for Gnome Shell.
-![alt text](<./img/azan.png>) 
+![alt text](/.img/azan.png) 
 
 ### Features
 
