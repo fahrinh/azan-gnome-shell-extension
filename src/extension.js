@@ -2,7 +2,6 @@ const Geoclue = imports.gi.Geoclue;
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const Soup = imports.gi.Soup;
-const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 const GObject = imports.gi.GObject;
 const GLib = imports.gi.GLib;
@@ -226,49 +225,49 @@ class Azan extends PanelMenu.Button {
   }
   
   _bindSettings() {
-    this._settings.connect('changed::' + PrefsKeys.AUTO_LOCATION, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.AUTO_LOCATION, (settings, key) => {
         this._opt_autoLocation = settings.get_boolean(key);
         this._updateAutoLocation();
         this._updateLabel();
-    }));
+    });
 
-    this._settings.connect('changed::' + PrefsKeys.CALCULATION_METHOD, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.CALCULATION_METHOD, (settings, key) => {
         this._opt_calculationMethod = settings.get_string(key);
 
         this._updateLabel();
-    }));
+    });
     
-    this._settings.connect('changed::' + PrefsKeys.ADJUSTMENT, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.ADJUSTMENT, (settings, key) => {
         this._opt_adjustment = settings.get_int(key);
 
         this._updateLabel();
-    }));
+    });
     
-    this._settings.connect('changed::' + PrefsKeys.LATITUDE, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.LATITUDE, (settings, key) => {
         this._opt_latitude = settings.get_double(key);
 
         this._updateLabel();
-    }));
-    this._settings.connect('changed::' + PrefsKeys.LONGITUDE, Lang.bind(this, function(settings, key) {
+    });
+    this._settings.connect('changed::' + PrefsKeys.LONGITUDE, (settings, key) => {
         this._opt_longitude = settings.get_double(key);
 
         this._updateLabel();
-    }));
-    this._settings.connect('changed::' + PrefsKeys.TIME_FORMAT_12, Lang.bind(this, function(settings, key) {
+    });
+    this._settings.connect('changed::' + PrefsKeys.TIME_FORMAT_12, (settings, key) => {
         this._opt_timeformat12 = settings.get_boolean(key);
         this._updateLabel();
-    }));
-    this._settings.connect('changed::' + PrefsKeys.TIMEZONE, Lang.bind(this, function(settings, key) {
+    });
+    this._settings.connect('changed::' + PrefsKeys.TIMEZONE, (settings, key) => {
         this._opt_timezone = settings.get_string(key);
 
         this._updateLabel();
-    }));
+    });
 
-    this._settings.connect('changed::' + PrefsKeys.CONCISE_LIST, Lang.bind(this, function(settings, key) {
+    this._settings.connect('changed::' + PrefsKeys.CONCISE_LIST, (settings, key) => {
       this._opt_concise_list = settings.get_string(key);
       this._updateLabel();
       this._updatePrayerVisibility();
-    }));
+    });
   }
 
   _updatePrayerVisibility() {
@@ -284,9 +283,11 @@ class Azan extends PanelMenu.Button {
   _updateLabelPeriodic() {
       let currentSeconds = new Date().getSeconds();
       if (currentSeconds === 0) {
-         this._periodicTimeoutId = Mainloop.timeout_add_seconds(60, Lang.bind(this, this._updateLabelPeriodic));
+         this._periodicTimeoutId = Mainloop.timeout_add_seconds(60,
+         this._updateLabelPeriodic.bind(this));
       } else {
-         this._periodicTimeoutId = Mainloop.timeout_add_seconds(60 - currentSeconds, Lang.bind(this, this._updateLabelPeriodic));
+         this._periodicTimeoutId = Mainloop.timeout_add_seconds(60 - currentSeconds,
+         this._updateLabelPeriodic.bind(this));
       }
       
       this._updateLabel();

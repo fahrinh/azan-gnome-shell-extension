@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
@@ -38,14 +37,14 @@ const PagePrefsGrid = new GObject.Class({
             hexpand: false
         });
         item.set_text(this._settings.get_strv(settings_key)[0]);
-        item.connect('changed', Lang.bind(this, function(entry) {
+        item.connect('changed', (entry) => {
             let [key, mods] = Gtk.accelerator_parse(entry.get_text());
 
             if(Gtk.accelerator_valid(key, mods)) {
                 let shortcut = Gtk.accelerator_name(key, mods);
                 this._settings.set_strv(settings_key, [shortcut]);
             }
-        }));
+        });
 
         return this.add_row(text, item);
     },
@@ -79,7 +78,7 @@ const PagePrefsGrid = new GObject.Class({
             item.set_active_id(this._settings.get_int(key).toString());
         }
 
-        item.connect('changed', Lang.bind(this, function(combo) {
+        item.connect('changed', (combo) => {
             let value = combo.get_active_id();
 
             if(type === 'string') {
@@ -94,7 +93,7 @@ const PagePrefsGrid = new GObject.Class({
                     this._settings.set_int(key, value);
                 }
             }
-        }));
+        });
 
         return this.add_row(text, item);
     },
@@ -116,17 +115,17 @@ const PagePrefsGrid = new GObject.Class({
         let spin_button = new Gtk.SpinButton(spin_properties);
 
         spin_button.set_value(this._settings.get_double(key));
-        spin_button.connect('value-changed', Lang.bind(this, function(spin) {
+        spin_button.connect('value-changed', (spin) => {
             let value = spin.get_value();
 
             if(this._settings.get_double(key) !== value) {
                 this._settings.set_double(key, value);
             }
-        }));
+        });
 
-        this._settings.connect('change-event', Lang.bind(this, function(settings, key_set) {
+        this._settings.connect('change-event', (settings, key_set) => {
           spin_button.set_value(this._settings.get_double(key));
-        }));
+        });
 
         return this.add_row(label, spin_button, true);
     },
@@ -199,9 +198,9 @@ const PagePrefsGrid = new GObject.Class({
 
         range.set_size_request(range_properties.size, -1);
 
-        range.connect('value-changed', Lang.bind(this, function(slider) {
+        range.connect('value-changed', (slider) => {
             this._settings.set_int(key, slider.get_value());
-        }));
+        });
 
         return this.add_row(label, range, true);
     }
@@ -300,10 +299,10 @@ const AzanPrefsWidget = new GObject.Class({
             step_increment: 0.0001
         });
 
-        let updateLocationState = Lang.bind(this, function(entry,state) {
+        let updateLocationState = (entry,state) => {
           this.latitude_box.set_sensitive(!state);
           this.longitude_box.set_sensitive(!state);
-        })
+        }
 
         this.auto_location = location_page.add_boolean('Automatic location', PrefsKeys.AUTO_LOCATION, updateLocationState);
 
