@@ -1,6 +1,11 @@
 .azan-panel {
-    font-family: Lotus, Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    direction: rtl;
+  font-family: Lotus, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+	direction: rtl;
+}
+
+.prefs_s_action:hover {
+	color: white;
+	border: none;
 }

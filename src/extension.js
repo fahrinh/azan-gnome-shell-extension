@@ -25,7 +25,7 @@ const Azan = GObject.registerClass(
 class Azan extends PanelMenu.Button {
 
   _init() {
-    super._init(0.0, _('Azan'));
+    super._init(0.5, _('Azan'));
 
     this.indicatorText = new St.Label({text: _("Loading..."), y_align: Clutter.ActorAlign.CENTER});
     this.add_child(this.indicatorText);
@@ -81,7 +81,7 @@ class Azan extends PanelMenu.Button {
     this._prayItems = {};
 
     this._dateMenuItem = new PopupMenu.PopupMenuItem(_("TODO"), {
-        style_class: 'azan-panel', reactive: true, hover: false, activate: false
+        style_class: 'azan-panel', reactive: false, hover: false, activate: false
     });
 
     this.menu.addMenuItem(this._dateMenuItem);
@@ -93,7 +93,7 @@ class Azan extends PanelMenu.Button {
         let prayerName = this._timeNames[prayerId];
 
         let prayMenuItem = new PopupMenu.PopupMenuItem(_(prayerName), {
-            reactive: true, hover: false, activate: false
+            reactive: false, hover: false, activate: false
         });
 
         let bin = new St.Bin({x_expand: true,x_align: Clutter.ActorAlign.END});
@@ -110,9 +110,23 @@ class Azan extends PanelMenu.Button {
 
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-    this.menu.addAction(_("Settings"), Lang.bind(this, function() {
-        Util.spawn(["gnome-extensions", "prefs", Extension.metadata.uuid]);
-    }));
+//	making mordernize
+		this.prefs_s = new PopupMenu.PopupBaseMenuItem ({ reactive: false, can_focus: false});
+		let l = new St.Label ({text: ' '});
+    l.x_expand = true;
+    this.prefs_s.actor.add(l);
+    this.prefs_b = new St.Button ({ child: new St.Icon ({ icon_name: 'preferences-system-symbolic', icon_size: 30 }), style_class: 'prefs_s_action'});
+    
+    this.prefs_b.connect ('clicked', () => {
+    	Util.spawn(["gnome-extensions", "prefs", Extension.metadata.uuid]);
+    });
+    
+    this.prefs_s.actor.add(this.prefs_b);
+    l = new St.Label ({text: ' '});
+    l.x_expand = true;
+    this.prefs_s.actor.add(l);
+    
+    this.menu.addMenuItem(this.prefs_s);
 
     this._updateLabelPeriodic();
     this._updatePrayerVisibility();
@@ -393,8 +407,7 @@ class Azan extends PanelMenu.Button {
         Mainloop.source_remove(this._periodicTimeoutId);
   		}
 		}
-}
-);
+});
 
 let azan;
 
