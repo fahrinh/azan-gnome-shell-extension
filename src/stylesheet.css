@@ -1,9 +1,11 @@
+.azan-panel {
+  font-family: Lotus, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+	direction: rtl;
+}
 
-.helloworld-label {
-    font-size: 36px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: rgba(10,10,10,0.7);
-    border-radius: 5px;
-    padding: .5em;
+.prefs_s_action:hover {
+	color: white;
+	border: none;
 }

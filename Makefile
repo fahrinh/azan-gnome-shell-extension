@@ -1,5 +1,5 @@
 #=============================================================================
-UUID=$(shell cat src/metadata.json | python -c "import json,sys;obj=json.load(sys.stdin);print obj['uuid'];")
+UUID=$(shell cat src/metadata.json | python3 -c "import json,sys;obj=json.load(sys.stdin);print(obj['uuid']);")
 SRCDIR=src
 BUILDDIR=build
 FILES=metadata.json *.js stylesheet.css schemas
@@ -8,6 +8,7 @@ MKFILE_DIR := $(dir $(MKFILE_PATH))
 ABS_MKFILE_PATH := $(abspath $(MKFILE_PATH))
 ABS_MKFILE_DIR := $(abspath $(MKFILE_DIR))
 ABS_BUILDDIR=$(ABS_MKFILE_DIR)/$(BUILDDIR)
+INSTALL_PATH=~/.local/share/gnome-shell/extensions
 #=============================================================================
 default_target: all
 .PHONY: clean all zip install
@@ -23,10 +24,16 @@ all: clean
 		glib-compile-schemas $(BUILDDIR)/$(UUID)/schemas; \
 	fi
 
+xz: all
+	(cd $(BUILDDIR)/$(UUID); \
+         tar -czvf $(ABS_BUILDDIR)/$(UUID).tar.xz $(FILES:%=%); \
+        );
+
 zip: all
 	(cd $(BUILDDIR)/$(UUID); \
          zip -rq $(ABS_BUILDDIR)/$(UUID).zip $(FILES:%=%); \
         );
-
+        
 install: all
-	 cp -rp build/azan@faissal.bensefia.id ~/.local/share/gnome-shell/extensions
+	mkdir -p $(INSTALL_PATH)/$(UUID)
+	cp -R -p build/$(UUID)/* $(INSTALL_PATH)/$(UUID)

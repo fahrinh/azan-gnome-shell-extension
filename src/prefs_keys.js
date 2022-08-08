@@ -3,5 +3,6 @@ var CALCULATION_METHOD = 'calculation-method';
 var LATITUDE = 'latitude';
 var LONGITUDE = 'longitude';
 var TIMEZONE = 'timezone';
-var TIME_FORAMT_12 = 'time-format-12';
+var TIME_FORMAT_12 = 'time-format-12';
 var CONCISE_LIST = 'concise-list';
+var ADJUSTMENT = 'adjustment';
