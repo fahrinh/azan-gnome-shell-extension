@@ -8,6 +8,12 @@
         <description>Calculation method</description>
     </key>
 
+    <key type="s" name="madhab">
+        <default>"Standard"</default>
+        <summary>Madhab</summary>
+        <description>Madhab for calculating of Asr time</description>
+    </key>
+
     <key type="b" name="auto-location">
         <default>true</default>
         <summary>Automatic location</summary>
