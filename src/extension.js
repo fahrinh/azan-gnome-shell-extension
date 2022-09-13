@@ -54,7 +54,6 @@ class Azan extends PanelMenu.Button {
                                  "Ramadhan", "Shawwal", "Dhul Qa'ada", "Dhul Hijja");
 
     this._timeNames = {
-        imsak: 'Imsak',
         fajr: 'Fajr',
         sunrise: 'Sunrise',
         dhuhr: 'Dhuhr',
@@ -66,7 +65,6 @@ class Azan extends PanelMenu.Button {
     };
 
     this._timeConciseLevels = {
-      imsak: 0,
       fajr: 1,
       sunrise: 0,
       dhuhr: 1,
