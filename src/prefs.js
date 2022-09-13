@@ -267,6 +267,11 @@ const AzanPrefsWidget = new GObject.Class({
           'string'
         );
 
+        calculation_page.add_combo('Madhab', PrefsKeys.MADHAB, [
+            {'title': 'Standard (Shafii, Maliki, Hanbali)', 'value': 'Standard'},
+            {'title': 'Hanafi', 'value': 'Hanafi'}
+          ], 'string');
+
         calculation_page.add_range('Adjustment days', PrefsKeys.ADJUSTMENT, {
             min: -2,
             max: 2,

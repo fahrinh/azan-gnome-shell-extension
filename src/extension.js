@@ -33,6 +33,7 @@ class Azan extends PanelMenu.Button {
     this._weatherAuthorized = false;
 
     this._opt_calculationMethod = null;
+    this._opt_madhab = null;
     this._opt_latitude = null;
     this._opt_longitude = null;
     this._opt_timezone = null;
@@ -212,6 +213,7 @@ class Azan extends PanelMenu.Button {
   
   _loadSettings() {
     this._opt_calculationMethod = this._settings.get_string(PrefsKeys.CALCULATION_METHOD);
+    this._opt_madhab = this._settings.get_string(PrefsKeys.MADHAB);
     this._opt_adjustment = this._settings.get_int(PrefsKeys.ADJUSTMENT);
     this._opt_autoLocation = this._settings.get_boolean(PrefsKeys.AUTO_LOCATION);
     this._updateAutoLocation();
@@ -231,6 +233,12 @@ class Azan extends PanelMenu.Button {
 
     this._settings.connect('changed::' + PrefsKeys.CALCULATION_METHOD, (settings, key) => {
         this._opt_calculationMethod = settings.get_string(key);
+
+        this._updateLabel();
+    });
+
+    this._settings.connect('changed::' + PrefsKeys.MADHAB, (settings, key) => {
+        this._opt_madhab = settings.get_string(key);
 
         this._updateLabel();
     });
@@ -298,6 +306,7 @@ class Azan extends PanelMenu.Button {
       let myLocation = [this._opt_latitude, this._opt_longitude];
       let myTimezone = this._opt_timezone;
       this._prayTimes.setMethod(this._opt_calculationMethod);
+      this._prayTimes.adjust({asr: this._opt_madhab});
 
       let currentDate = new Date();
 
