@@ -61,6 +61,7 @@ const Azan = new Lang.Class({
     this._opt_timezone = null;
     this._opt_timeformat12 = false;
     this._opt_concise_list = null;
+    this._opt_hijriDateAdjustment = null;
 
     this._settings = Convenience.getSettings();
     this._bindSettings();
@@ -250,6 +251,7 @@ const Azan = new Lang.Class({
     this._opt_timeformat12 = this._settings.get_boolean(PrefsKeys.TIME_FORMAT_12);
     this._opt_timezone = this._settings.get_string(PrefsKeys.TIMEZONE);
     this._opt_concise_list = this._settings.get_string(PrefsKeys.CONCISE_LIST);
+    this._opt_hijriDateAdjustment = this._settings.get_double(PrefsKeys.HIJRI_DATE_ADJUSTMENT);
   },
   _bindSettings: function() {
     this._settings.connect('changed::' + PrefsKeys.AUTO_LOCATION, Lang.bind(this, function(settings, key) {
@@ -287,6 +289,12 @@ const Azan = new Lang.Class({
       this._opt_concise_list = settings.get_string(key);
       this._updateLabel();
       this._updatePrayerVisibility();
+    }));
+
+    this._settings.connect('changed::' + PrefsKeys.HIJRI_DATE_ADJUSTMENT, Lang.bind(this, function(settings, key) {
+        this._opt_hijriDateAdjustment = settings.get_double(key);
+
+        this._updateLabel();
     }));
   },
 
@@ -378,7 +386,7 @@ const Azan = new Lang.Class({
       };
 
 
-      let hijriDate = HijriCalendarKuwaiti.KuwaitiCalendar();
+      let hijriDate = HijriCalendarKuwaiti.KuwaitiCalendar(this._opt_hijriDateAdjustment);
 
       let outputIslamicDate = this._formatHijriDate(hijriDate);
 

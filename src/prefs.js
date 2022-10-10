@@ -308,6 +308,13 @@ const AzanPrefsWidget = new GObject.Class({
           {'title': 'Concise', 'value': '1'}
         ], 'string');
 
+        let hijri_date_adjustment_page = new PagePrefsGrid();
+        hijri_date_adjustment_page.add_spin('Date Adjustment', PrefsKeys.HIJRI_DATE_ADJUSTMENT, {
+            lower: -30,
+            upper: 30,
+            step_increment: 1
+        });
+
         let pages = [
           {
             name: 'Calculation',
@@ -320,6 +327,10 @@ const AzanPrefsWidget = new GObject.Class({
           {
             name: 'Display',
             page: display_page
+          },
+          {
+              name: 'Hijri Date Adjustment',
+              page: hijri_date_adjustment_page
           }
         ];
 
