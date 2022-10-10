@@ -4,13 +4,14 @@
   "settings-schema": "org.gnome.shell.extensions.azan",
   "shell-version": [
     "3.36.1",
+    "3.36.9",
     "3.38.0",
     "40.0",
     "41.0",
     "42.0",
     "43.0"
   ],
-  "url": "https://github.com/raihan2000/azan-gnome-shell-extension",
+  "url": "https://github.com/faissaloo/azan-gnome-shell-extension",
   "uuid": "azan@faissal.bensefia.id",
-  "version": 6
+  "version": 10
 }

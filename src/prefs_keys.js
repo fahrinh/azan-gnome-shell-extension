@@ -1,5 +1,6 @@
 var AUTO_LOCATION = 'auto-location';
 var CALCULATION_METHOD = 'calculation-method';
+var MADHAB = 'madhab';
 var LATITUDE = 'latitude';
 var LONGITUDE = 'longitude';
 var TIMEZONE = 'timezone';
