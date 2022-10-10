@@ -2,7 +2,7 @@
 
 Azan is an Islamic prayer times extension for Gnome Shell.
 
-![screen shot 2017-12-02 at 9 16 20 am](https://user-images.githubusercontent.com/55460/33510682-88954874-d741-11e7-99f7-c063aca0ff4c.png)
+![alt text](/.img/azan.png) 
 
 ### Features
 
@@ -13,17 +13,24 @@ Azan is an Islamic prayer times extension for Gnome Shell.
 - Display a notification when it's time for prayer
 - Automatic location detection
 - Display times in either 24 hour or 12 hour format
+- Adjust the Hijri date
 
 ### Installation
 
-1. Download zip file : https://extensions.gnome.org/extension/1344/azan/
-2. Extract to `~/.local/share/gnome-shell/extensions/`
+1. clone this repository
+2. run `make && make install`
 
 ### Changelog
 
-- 0.1 : initial upload
-- 1.1 : Add automatic location detection & bugfixes
-- 2 : 12 hour times and optional hiding of non-prayer times  
+- 01 : initial upload
+- 02 : Add automatic location detection & bugfixes
+- 03 : 12 hour times and optional hiding of non-prayer times
+- 04 : Add support for Hijri date adjustment
+- 05 : Add support for Gnome 40+
+- 06 : Bump version Gnome 42
+- 07 : Added support for Gnome 3.36+
+- 10 : Bugfixes
+- 11 : MUI calculation method and addition of disclaimer
 
 ### License
 
@@ -33,7 +40,3 @@ Licensed under the GNU General Public License, version 3
 
 - [PrayTimes.js](http://praytimes.org/manual/)
 - [HijriCalendar-Kuwaiti.js](http://www.al-habib.info/islamic-calendar/hijricalendar-kuwaiti.js)
-
-### Other Projects
-
-- Azan applet for Cinnamon : https://cinnamon-spices.linuxmint.com/applets/view/303
