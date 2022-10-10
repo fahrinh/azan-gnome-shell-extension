@@ -12,6 +12,7 @@ const PopupMenu = imports.ui.popupMenu;
 const MessageTray = imports.ui.messageTray;
 const Util = imports.misc.util;
 const PermissionStore = imports.misc.permissionStore;
+const ExtensionUtils = imports.misc.extensionUtils;
 
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 
@@ -117,7 +118,7 @@ class Azan extends PanelMenu.Button {
     this.prefs_b = new St.Button ({ child: new St.Icon ({ icon_name: 'preferences-system-symbolic', icon_size: 30 }), style_class: 'prefs_s_action'});
     
     this.prefs_b.connect ('clicked', () => {
-    	Util.spawn(["gnome-extensions", "prefs", Extension.metadata.uuid]);
+      ExtensionUtils.openPrefs()
     });
     
     this.prefs_s.actor.add(this.prefs_b);
