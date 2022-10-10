@@ -148,11 +148,16 @@ const PagePrefsGrid = new GObject.Class({
         	});
         }
 
-        this.attach(label, 0, this._rownum, 1, 1); // col, row, colspan, rowspan
-        this.attach(widget, 1, this._rownum, 1, 1);
+        if (widget) {
+          this.attach(label, 0, this._rownum, 1, 1); // col, row, colspan, rowspan
+          this.attach(widget, 1, this._rownum, 1, 1);
+        } else {
+          this.attach(label, 0, this._rownum, 2, 1); // col, row, colspan, rowspan
+        }
         this._rownum++;
-
-        return widget;
+        if (widget) {
+          return widget;
+        }
     },
 
     add_item: function(widget, col, colspan, rowspan) {
@@ -258,7 +263,8 @@ const AzanPrefsWidget = new GObject.Class({
         	calculation_page.set_margin_start(5);
         	calculation_page.set_margin_end(5);
 		}
-
+        calculation_page.add_row('Please note that all prayer calculations by their nature can only be a guideline and are not definitive.', false, true);
+        
         calculation_page.add_combo('Calculation method',
           PrefsKeys.CALCULATION_METHOD,
           Object
