@@ -58,6 +58,9 @@ http://praytimes.org/calculation
 
 function getMethods() {
   return {
+        MUI: {
+            name: 'Majelis Ulama Indonesia',
+            params: { fajr: 20, dhuhr: '4 mins', maghrib: 2, isha: 18.75 } },
 		MWL: {
 			name: 'Muslim World League',
 			params: { fajr: 18, isha: 17 } },
